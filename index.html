@@ -194,230 +194,28 @@ td:first-child, th:first-child {
     font-weight:600;
   }
 
-  button:hover,
+  button:hover, 
   .cc-btn:hover{
     background:#ece6dc;
   }
 
   hr{
-    max-width:760px;
-    margin:18px auto;
-    border:none;
-    border-top:1px solid var(--border-soft);
-  }
-</style></head>
-<body>
+  <div class="cc-panel">
 
-<h1>Cash-Count</h1>
+  <p>
+    Cash-Count ist ein offline nutzbarer Bargeldzähler für Kassenstände,
+    Schichtwechsel und Kassenabschluss.
+  </p>
 
-<div class="cc-panel">
-  <h1>Cash-Count</h1>
-  <p>Cash-Count ist ein offline nutzbarer Bargeldzähler für Kassenstände, Schichtwechsel und Kassenabschluss.</p>
   <ul>
     <li>Werbefrei</li>
     <li>Ohne Registrierung</li>
     <li>Sofort einsatzbereit</li>
   </ul>
- 
- 
-<a class="cta" href="#rechner">Zum Bargeldzähler</a>
-  
+
+  <a class="cta" href="#rechner">Zum Bargeldzähler</a>
 
 </div>
-
-<hr style="max-width:760px;margin:16px auto;">
-<div class="cc-panel">
-
-<div id="rechner">
-<div class="bar">
-  <button class="ok" id="btnSave">Zählung speichern</button>
-  <button class="danger" id="btnNew">Neuer Zählvorgang</button>
-</div>
-
-<table>
-  <tr><th>Stückelung</th><th>Anzahl</th><th>Betrag</th></tr>
-
-  <!-- Keine value="0" -> startet leer -->
-  <tr><td>1 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c1"></td><td id="s1" class="zero">—</td></tr>
-  <tr><td>2 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c2"></td><td id="s2" class="zero">—</td></tr>
-  <tr><td>5 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c5"></td><td id="s5" class="zero">—</td></tr>
-  <tr><td>10 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c10"></td><td id="s10" class="zero">—</td></tr>
-  <tr><td>20 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c20"></td><td id="s20" class="zero">—</td></tr>
-  <tr><td>50 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c50"></td><td id="s50" class="zero">—</td></tr>
-
-  <tr><td>1 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c100"></td><td id="s100" class="zero">—</td></tr>
-  <tr><td>2 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c200"></td><td id="s200" class="zero">—</td></tr>
-
-  <tr><td>5 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c500"></td><td id="s500" class="zero">—</td></tr>
-  <tr><td>10 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c1000"></td><td id="s1000" class="zero">—</td></tr>
-  <tr><td>20 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c2000"></td><td id="s2000" class="zero">—</td></tr>
-  <tr><td>50 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c5000"></td><td id="s5000" class="zero">—</td></tr>
-  <tr><td>100 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c10000"></td><td id="s10000" class="zero">—</td></tr>
-  <tr><td>200 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c20000"></td><td id="s20000" class="zero">—</td></tr>
-  <tr><td>500 €</td><td><input type="number" inputmode="numeric" min="0" step="1" id="c50000"></td><td id="s50000" class="zero">—</td></tr>
-</table>
-
-<div class="total">
-  Gesamtsumme: <span id="total">0,00&nbsp;€</span>
-</div>
-
-<div class="history">
-  <h2>Gespeicherte Zählungen</h2>
-  <div class="small">Alles bleibt lokal auf diesem Gerät im Browser gespeichert.</div>
-  <div id="historyList"></div>
-</div>
-
-<script>
-  const values = {
-    c1: 0.01, c2: 0.02, c5: 0.05, c10: 0.10, c20: 0.20, c50: 0.50,
-    c100: 1, c200: 2, c500: 5, c1000: 10, c2000: 20, c5000: 50,
-    c10000: 100, c20000: 200, c50000: 500
-  };
-
-  const KEY_DRAFT = "cashcounter_draft_v1";
-  const KEY_HISTORY = "cashcounter_history_v1";
-
-  const fmtEUR = (num) =>
-    num.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
-
-  function readCount(id){
-    const raw = document.getElementById(id).value.trim();
-    return raw === "" ? 0 : (parseInt(raw, 10) || 0);
-  }
-
-  function setCount(id, n){
-    document.getElementById(id).value = (n === 0 ? "" : String(n));
-  }
-
-  function getSnapshot(){
-    const data = {};
-    for (const id in values) data[id] = readCount(id);
-    return data;
-  }
-
-  function applySnapshot(data){
-    for (const id in values) setCount(id, (data && typeof data[id]==="number") ? data[id] : 0);
-    update();
-  }
-
-  function update() {
-    let total = 0;
-
-    for (const id in values) {
-      const count = readCount(id);
-      const sum = count * values[id];
-      const out = document.getElementById("s" + id.substring(1));
-
-      if (sum === 0) {
-        out.textContent = "—";
-        out.classList.add("zero");
-      } else {
-        out.textContent = fmtEUR(sum);
-        out.classList.remove("zero");
-      }
-      total += sum;
-    }
-
-    document.getElementById("total").innerHTML = fmtEUR(total).replace(" €", "&nbsp;€");
-
-    // Auto-Draft speichern (damit du nie wieder „weg“ verlierst)
-    localStorage.setItem(KEY_DRAFT, JSON.stringify({ savedAt: Date.now(), data: getSnapshot() }));
-  }
-
-  function newCount(){
-    // bewusst: keine ESC-Falle – nur über Button
-    if (!confirm("Neuen Zählvorgang starten? (Aktuelle Eingaben werden geleert)")) return;
-    for (const id in values) setCount(id, 0);
-    update();
-  }
-
-  function loadHistory(){
-    const list = document.getElementById("historyList");
-    const hist = JSON.parse(localStorage.getItem(KEY_HISTORY) || "[]");
-
-    if (!hist.length){
-      list.innerHTML = "<div class='small' style='margin-top:8px'>Noch keine gespeicherten Zählungen.</div>";
-      return;
-    }
-
-    list.innerHTML = "";
-    hist.slice().reverse().forEach((entry) => {
-      const div = document.createElement("div");
-      div.className = "item";
-
-      const left = document.createElement("div");
-      const dt = new Date(entry.savedAt);
-      left.innerHTML = `<div class="meta">${dt.toLocaleString("de-DE")}</div>
-                        <div class="small">Gesamt: ${fmtEUR(entry.total)}</div>`;
-
-      const right = document.createElement("div");
-      const btnLoad = document.createElement("button");
-      btnLoad.textContent = "Laden";
-      btnLoad.onclick = () => applySnapshot(entry.data);
-
-      const btnDel = document.createElement("button");
-      btnDel.textContent = "Löschen";
-      btnDel.className = "danger";
-      btnDel.onclick = () => {
-        const all = JSON.parse(localStorage.getItem(KEY_HISTORY) || "[]");
-        const filtered = all.filter(x => x.id !== entry.id);
-        localStorage.setItem(KEY_HISTORY, JSON.stringify(filtered));
-        loadHistory();
-      };
-
-      right.appendChild(btnLoad);
-      right.appendChild(btnDel);
-
-      div.appendChild(left);
-      div.appendChild(right);
-      list.appendChild(div);
-    });
-  }
-
-  function saveToHistory(){
-    // aktuelle Summe berechnen
-    let total = 0;
-    for (const id in values) total += readCount(id) * values[id];
-
-    const entry = {
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
-      savedAt: Date.now(),
-      total,
-      data: getSnapshot()
-    };
-
-    const hist = JSON.parse(localStorage.getItem(KEY_HISTORY) || "[]");
-    hist.push(entry);
-
-    // Begrenzung, damit es nicht unendlich wächst
-    const MAX = 200;
-    const trimmed = hist.slice(-MAX);
-
-    localStorage.setItem(KEY_HISTORY, JSON.stringify(trimmed));
-    loadHistory();
-    alert("Gespeichert.");
-  }
-
-  // Events
-  document.querySelectorAll("input").forEach(input => input.addEventListener("input", update));
-  document.getElementById("btnNew").addEventListener("click", newCount);
-  document.getElementById("btnSave").addEventListener("click", saveToHistory);
-
-  // Beim Start: Draft wiederherstellen
-  try{
-    const draft = JSON.parse(localStorage.getItem(KEY_DRAFT) || "null");
-    if (draft && draft.data) applySnapshot(draft.data);
-    else update();
-  } catch { update(); }
-
-  loadHistory();
-</script>
-</div>       
-</div>  
-</body>
-</html>
-
-
 
 
 
