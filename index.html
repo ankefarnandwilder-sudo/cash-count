@@ -2,10 +2,21 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" 
+   content="width=device-width,
+    initial-scale=1" />
  <title>Bargeldzähler – lokal</title>
  <style>
-body {
+   :root {
+    --bg-sand:#f5f1ea;
+    --panel-sage:#eef2ef;
+    --text-dark:#2b2b2b;
+    --text-soft:#6f6f6f;
+    --border-soft:#d9d6cf;
+    --accent:#8fa59a;
+    --radius:14px;
+  }
+ body {
   font-family: system-ui, 
  -apple-system, Segoe UI, Roboto,
   Arial, sans-serif;
@@ -13,7 +24,6 @@ body {
   background: #f7f6f3; 
   color: #333;
 }
-</style>
 /* ===== Infobox oben ===== */
 .cc-panel {
   max-width: 760px;
@@ -21,8 +31,7 @@ body {
   padding: 16px;
   background: #ffffff;
   border-radius: 14px;
-  box-shadow: 0 4px 14px
-  rgba(0,0,0,0.06);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
 }
 /* ===== Text ===== */
 p {
@@ -52,8 +61,7 @@ button {
   border-radius: 12px;
   cursor: pointer;
   min-height: 44px;
-  transition: background 0.2s ease,
-  border-color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 /* Hover */
 button:hover {
@@ -96,29 +104,17 @@ td:first-child, th:first-child {
 /* ===== Gesamtsumme ===== */
 .total {
   margin-top: 16px;
+  padding: 12px;
   text-align: center;
   font-size: 1.3rem;
   font-weight: 700;
+  background: var(--bg-sand);
+  color: var(--text-dark);
+  border-radius: 12px;
 }
-<style>
-  :root{
-    --bg-sand:#f5f1ea;
-    --panel-sage:#eef2ef;
-    --text-dark:#2b2b2b;
-    --text-soft:#6f6f6f;
-    --border-soft:#d9d6cf;
-    --accent:#8fa59a;
-    --radius:14px;
-  }
-
-  body{
-    margin:0;
-    background:var(--bg-sand);
-    color:var(--text-dark);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     line-height:1.45;
   }
-
   /* Haupttitel oben */
   h1{
     font-size:28px;
@@ -129,17 +125,15 @@ td:first-child, th:first-child {
     padding:0 16px;
     letter-spacing:0.2px;
   }
-
   /* Untertitel / Erklärung */
   h2{
     font-size:18px;
     font-weight:500;
     color:var(--text-soft);
-    margin:0 auto 14px;
+    margin:0 auto 16px;
     max-width:760px;
     padding:0 16px;
   }
-
   /* Infobox / Intro */
   .cc-intro{
     max-width:760px;
@@ -149,11 +143,9 @@ td:first-child, th:first-child {
     border:1px solid var(--border-soft);
     border-radius:var(--radius);
   }
-
   .cc-intro p{ margin:0 0 12px; color:var(--text-dark); }
   .cc-intro ul{ margin:0 0 14px 18px; }
   .cc-intro li{ margin:6px 0; }
-
   /* Rechnerbereich */
   .cc-panel{
     background:var(--panel-sage);
@@ -162,41 +154,25 @@ td:first-child, th:first-child {
     margin:16px auto;
     max-width:760px;
   }
-
   /* Buttons */
   button,
   .cc-btn{
+    min-height: 44px;
     background:var(--bg-sand);
     border:1px solid var(--border-soft);
     color:var(--text-dark);
-    padding:10px 14px;
+    padding:12px 14px;
     border-radius:12px;
     font-size:14px;
     font-weight:600;
   }
-
   button:hover, 
   .cc-btn:hover{
     background:#ece6dc;
   }
-
-  hr{
-  <div class="cc-panel">
-
-  <p>
-    Cash-Count ist ein offline nutzbarer Bargeldzähler für Kassenstände,
-    Schichtwechsel und Kassenabschluss.
-  </p>
-
-  <ul>
-    <li>Werbefrei</li>
-    <li>Ohne Registrierung</li>
-    <li>Sofort einsatzbereit</li>
-  </ul>
-
-  <a class="cta" href="#rechner">Zum Bargeldzähler</a>
-
-</div>
+  
+  
+ 
 
 
 
