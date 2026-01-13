@@ -44,12 +44,98 @@
     .meta{font-weight:700}
     .small{color:#666;font-size:.9rem}
   </style>
-</head>
+<style>
+  :root{
+    --bg-sand:#f5f1ea;
+    --panel-sage:#eef2ef;
+    --text-dark:#2b2b2b;
+    --text-soft:#6f6f6f;
+    --border-soft:#d9d6cf;
+    --accent:#8fa59a;
+    --radius:14px;
+  }
+
+  body{
+    margin:0;
+    background:var(--bg-sand);
+    color:var(--text-dark);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height:1.45;
+  }
+
+  /* Haupttitel oben */
+  h1{
+    font-size:28px;
+    font-weight:600;
+    color:var(--text-dark);
+    margin:20px auto 6px;
+    max-width:760px;
+    padding:0 16px;
+    letter-spacing:0.2px;
+  }
+
+  /* Untertitel / Erklärung */
+  h2{
+    font-size:18px;
+    font-weight:500;
+    color:var(--text-soft);
+    margin:0 auto 14px;
+    max-width:760px;
+    padding:0 16px;
+  }
+
+  /* Infobox / Intro */
+  .cc-intro{
+    max-width:760px;
+    margin:12px auto 18px;
+    padding:18px 16px;
+    background:#ffffff;
+    border:1px solid var(--border-soft);
+    border-radius:var(--radius);
+  }
+
+  .cc-intro p{ margin:0 0 12px; color:var(--text-dark); }
+  .cc-intro ul{ margin:0 0 14px 18px; }
+  .cc-intro li{ margin:6px 0; }
+
+  /* Rechnerbereich */
+  .cc-panel{
+    background:var(--panel-sage);
+    border-radius:var(--radius);
+    padding:16px;
+    margin:16px auto;
+    max-width:760px;
+  }
+
+  /* Buttons */
+  button,
+  .cc-btn{
+    background:var(--bg-sand);
+    border:1px solid var(--border-soft);
+    color:var(--text-dark);
+    padding:10px 14px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:600;
+  }
+
+  button:hover,
+  .cc-btn:hover{
+    background:#ece6dc;
+  }
+
+  hr{
+    max-width:760px;
+    margin:18px auto;
+    border:none;
+    border-top:1px solid var(--border-soft);
+  }
+</style></head>
 <body>
 
 <h1>Cash-Count</h1>
 
-<div style="max-width:760px;margin:24px auto;padding:16px;
+<div <div class="cc-intro"> style="max-width:760px;margin:24px auto;padding:16px;
 font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;">
 
   <p style="margin:0 0 12px 0;">
@@ -77,7 +163,7 @@ font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;">
 </div>
 
 <hr style="max-width:760px;margin:16px auto;">
-
+<div class="cc-panel">
 
 <div id="rechner">
 <div class="bar">
@@ -266,5 +352,6 @@ font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;">
 </div>
 </body>
 </html>
+
 
 
