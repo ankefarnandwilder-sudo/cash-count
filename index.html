@@ -6,21 +6,14 @@
  <title>Bargeldzähler – lokal</title>
  <style>
 body {
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: system-ui, 
+ -apple-system, Segoe UI, Roboto,
+  Arial, sans-serif;
   margin: 0;
-  background: #f7f6f3; /* sehr helles Sandgrau */
+  background: #f7f6f3; 
   color: #333;
 }
 </style>
-/* ===== Überschrift ===== */
-h1 {
-  margin: 16px 0 12px;
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #2f2f2f; /* dunkles Grau */
-}
-
 /* ===== Infobox oben ===== */
 .cc-panel {
   max-width: 760px;
@@ -28,22 +21,20 @@ h1 {
   padding: 16px;
   background: #ffffff;
   border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 14px
+  rgba(0,0,0,0.06);
 }
-
 /* ===== Text ===== */
 p {
   margin: 0 0 12px;
   line-height: 1.5;
 }
-
-/* ===== Liste ===== */
+  /* ===== Liste ===== */
 ul {
   margin: 0 0 16px 18px;
   padding: 0;
 }
-
-/* ===== Button-Leiste ===== */
+  /* ===== Button-Leiste ===== */
 .bar {
   display: flex;
   gap: 12px;
@@ -51,7 +42,6 @@ ul {
   justify-content: center;
   margin-bottom: 16px;
 }
-
 /* ===== Buttons allgemein ===== */
 button {
   border: 1px solid #d6d2c8;
@@ -62,56 +52,47 @@ button {
   border-radius: 12px;
   cursor: pointer;
   min-height: 44px;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: background 0.2s ease,
+  border-color 0.2s ease;
 }
-
 /* Hover */
 button:hover {
   background: #e6e1d8;
 }
-
 /* Speichern (Salbei) */
 button.ok {
   background: #e3ebe6;
   border-color: #b8cfc1;
 }
-
 button.ok:hover {
   background: #d6e2db;
 }
-
 /* Neuer Vorgang (zurückhaltend) */
 button.danger {
   background: #f3eaea;
   border-color: #e1bcbc;
 }
-
 button.danger:hover {
   background: #ecdede;
 }
-
 /* ===== Tabelle ===== */
 table {
   width: 100%;
   border-collapse: collapse;
 }
-
 th, td {
   padding: 10px 8px;
   border-bottom: 1px solid #ddd;
   text-align: right;
   vertical-align: middle;
 }
-
 th {
   background: #f2f1ee;
   font-weight: 600;
 }
-
 td:first-child, th:first-child {
   text-align: left;
 }
-
 /* ===== Gesamtsumme ===== */
 .total {
   margin-top: 16px;
@@ -216,6 +197,7 @@ td:first-child, th:first-child {
   <a class="cta" href="#rechner">Zum Bargeldzähler</a>
 
 </div>
+
 
 
 
