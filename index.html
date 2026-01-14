@@ -1,8 +1,419 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kassenbar-Zähler</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a33;
+      --muted:#9fb0ff;
+      --text:#eef1ff;
+      --line:rgba(255,255,255,.12);
+      --accent:#6ea8ff;
+      --good:#5eead4;
+      --warn:#fbbf24;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(110,168,255,.25), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(94,234,212,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:18px}
+    header{
+      display:flex;gap:14px;align-items:flex-start;justify-content:space-between;
+      padding:14px 14px 10px;border:1px solid var(--line);border-radius:18px;
+      background:rgba(18,26,51,.75);backdrop-filter: blur(8px);
+    }
+    h1{font-size:18px;margin:0 0 4px}
+    .sub{font-size:13px;color:rgba(238,241,255,.78);line-height:1.35}
+    .tools{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    button{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    button:hover{border-color:rgba(255,255,255,.22)}
+    button.primary{background:rgba(110,168,255,.18);border-color:rgba(110,168,255,.45)}
+    button.danger{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.45)}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
+    @media (min-width:860px){.grid{grid-template-columns:1fr 1fr}}
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(18,26,51,.65);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:12px 14px;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      border-bottom:1px solid var(--line);
+    }
+    .cardhead .title{font-weight:800}
+    .cardhead .mini{font-size:12px;color:rgba(238,241,255,.72)}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px 14px;border-bottom:1px solid var(--line)}
+    th{font-size:12px;letter-spacing:.02em;text-transform:uppercase;color:rgba(238,241,255,.68);text-align:left}
+    td.right{text-align:right}
+    td.center{text-align:center}
+    tr:last-child td{border-bottom:none}
+
+    input[type="number"]{
+      width:92px;
+      padding:9px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.18);
+      color:var(--text);
+      font-weight:700;
+      text-align:right;
+    }
+    input[type="number"]:focus{outline:2px solid rgba(110,168,255,.35);border-color:rgba(110,168,255,.55)}
+    .sum{font-weight:800}
+    .sectionTotal{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:12px 14px;border-top:1px solid var(--line);
+      background:rgba(0,0,0,.12);
+      font-weight:900;
+    }
+    .grand{
+      margin-top:14px;
+      border:1px solid rgba(94,234,212,.35);
+      background:rgba(94,234,212,.10);
+      border-radius:18px;
+      padding:14px;
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      flex-wrap:wrap;
+    }
+    .grand .label{font-weight:900;font-size:14px}
+    .grand .value{font-weight:1000;font-size:22px;color:var(--good)}
+    .options{
+      margin-top:10px;
+      display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+      padding:12px 14px;border:1px solid var(--line);border-radius:18px;
+      background:rgba(18,26,51,.55);
+    }
+    label{display:flex;gap:10px;align-items:center;font-size:13px;color:rgba(238,241,255,.78)}
+    .hint{font-size:12px;color:rgba(238,241,255,.62)}
+    footer{margin-top:14px;color:rgba(238,241,255,.55);font-size:12px;line-height:1.35}
+    .badge{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06);font-weight:700;font-size:12px}
+    @media print{
+      body{background:#fff;color:#000}
+      header,.options,button{display:none !important}
+      .card,.grand{background:#fff;border-color:#ddd}
+      input{border:1px solid #bbb;background:#fff;color:#000}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Kassenbar-Zähler</h1>
+        <div class="sub">
+          Gib pro Schein/Münze die Stückzahl ein – Summe & Gesamtsumme werden automatisch berechnet.<br/>
+          <span class="badge">ohne Werbung</span>
+          <span class="badge">offline nutzbar</span>
+        </div>
+      </div>
+      <div class="tools">
+        <button class="primary" id="btnCopy">Gesamtsumme kopieren</button>
+        <button id="btnPrint">Drucken</button>
+        <button class="danger" id="btnReset">Alles zurücksetzen</button>
+      </div>
+    </header>
+
+    <div class="options">
+      <label>
+        <input type="checkbox" id="saveToggle" />
+        Werte lokal speichern (optional)
+      </label>
+      <div class="hint">Standard: aus. Wenn an: speichert nur in deinem Browser (localStorage).</div>
+    </div>
+
+    <div class="grid">
+      <!-- SCHEINE -->
+      <section class="card" aria-label="Scheine">
+        <div class="cardhead">
+          <div>
+            <div class="title">Scheine</div>
+            <div class="mini">Stückzahl × Wert</div>
+          </div>
+          <div class="mini" id="noteCount"></div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Wert</th>
+              <th class="right">Stück</th>
+              <th class="right">Summe</th>
+            </tr>
+          </thead>
+          <tbody id="notesBody">
+            <!-- data-value = Euro-Wert -->
+            <tr data-value="200">
+              <td>200 €</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="100">
+              <td>100 €</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="50">
+              <td>50 €</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="20">
+              <td>20 €</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="10">
+              <td>10 €</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="5">
+              <td>5 €</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="sectionTotal">
+          <div>Zwischensumme Scheine</div>
+          <div id="notesTotal">0,00 €</div>
+        </div>
+      </section>
+
+      <!-- MÜNZEN -->
+      <section class="card" aria-label="Münzen">
+        <div class="cardhead">
+          <div>
+            <div class="title">Münzen</div>
+            <div class="mini">Stückzahl × Wert</div>
+          </div>
+          <div class="mini" id="coinCount"></div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Wert</th>
+              <th class="right">Stück</th>
+              <th class="right">Summe</th>
+            </tr>
+          </thead>
+          <tbody id="coinsBody">
+            <tr data-value="2">
+              <td>2 €</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="1">
+              <td>1 €</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="0.5">
+              <td>50 ct</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="0.2">
+              <td>20 ct</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="0.1">
+              <td>10 ct</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="0.05">
+              <td>5 ct</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="0.02">
+              <td>2 ct</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+            <tr data-value="0.01">
+              <td>1 ct</td>
+              <td class="right"><input type="number" inputmode="numeric" min="0" step="1" value="0" /></td>
+              <td class="right sum">0,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="sectionTotal">
+          <div>Zwischensumme Münzen</div>
+          <div id="coinsTotal">0,00 €</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grand" role="status" aria-live="polite">
+      <div class="label">Gesamtsumme</div>
+      <div class="value" id="grandTotal">0,00 €</div>
+    </div>
+
+    <footer>
+      Hinweis: Dieses Tool verarbeitet Eingaben lokal im Browser. Optionales Speichern erfolgt nur auf deinem Gerät (wenn aktiviert).
+    </footer>
+  </div>
+
+  <script>
+    // ===== Utilities =====
+    const euro = (n) => new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(n);
+
+    const getAllRows = () => [
+      ...document.querySelectorAll("#notesBody tr, #coinsBody tr")
+    ];
+
+    const getInputs = () => [
+      ...document.querySelectorAll("input[type='number']")
+    ];
+
+    const stateKey = "cash_count_state_v1";
+
+    function readState() {
+      try {
+        return JSON.parse(localStorage.getItem(stateKey) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function writeState(data) {
+      localStorage.setItem(stateKey, JSON.stringify(data));
+    }
+
+    function clearState() {
+      localStorage.removeItem(stateKey);
+    }
+
+    // ===== Calculation =====
+    function calculateSection(tbodyId, totalId, countId) {
+      let sectionTotal = 0;
+      let pieces = 0;
+
+      document.querySelectorAll(`#${tbodyId} tr`).forEach((row, idx) => {
+        const value = parseFloat(row.dataset.value || "0");
+        const input = row.querySelector("input");
+        const count = Math.max(0, parseInt(input.value || "0", 10) || 0);
+
+        const sum = value * count;
+        row.querySelector(".sum").textContent = euro(sum);
+
+        sectionTotal += sum;
+        pieces += count;
+      });
+
+      document.getElementById(totalId).textContent = euro(sectionTotal);
+      document.getElementById(countId).textContent = pieces ? `${pieces} Stück` : "";
+
+      return sectionTotal;
+    }
+
+    function updateAll() {
+      const notes = calculateSection("notesBody", "notesTotal", "noteCount");
+      const coins = calculateSection("coinsBody", "coinsTotal", "coinCount");
+      const total = notes + coins;
+
+      document.getElementById("grandTotal").textContent = euro(total);
+
+      // optional save
+      const saveOn = document.getElementById("saveToggle").checked;
+      if (saveOn) {
+        const data = {};
+        getAllRows().forEach((row, i) => {
+          const input = row.querySelector("input");
+          data[i] = input.value;
+        });
+        writeState(data);
+      }
+    }
+
+    // ===== Actions =====
+    function resetAll() {
+      getInputs().forEach(inp => inp.value = 0);
+      clearState();
+      updateAll();
+    }
+
+    async function copyTotal() {
+      const text = document.getElementById("grandTotal").textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        const btn = document.getElementById("btnCopy");
+        const old = btn.textContent;
+        btn.textContent = "Kopiert ✓";
+        setTimeout(() => btn.textContent = old, 900);
+      } catch {
+        alert("Kopieren nicht möglich. Markiere die Summe manuell.");
+      }
+    }
+
+    function loadIfEnabled() {
+      const saveOn = document.getElementById("saveToggle").checked;
+      if (!saveOn) return;
+
+      const data = readState();
+      const rows = getAllRows();
+      rows.forEach((row, i) => {
+        if (data[i] != null) row.querySelector("input").value = data[i];
+      });
+      updateAll();
+    }
+
+    // ===== Init =====
+    // nicer UX: click selects value
+    getInputs().forEach(inp => {
+      inp.addEventListener("focus", () => inp.select());
+      inp.addEventListener("input", updateAll);
+    });
+
+    document.getElementById("btnReset").addEventListener("click", resetAll);
+    document.getElementById("btnCopy").addEventListener("click", copyTotal);
+    document.getElementById("btnPrint").addEventListener("click", () => window.print());
+
+    document.getElementById("saveToggle").addEventListener("change", () => {
+      const on = document.getElementById("saveToggle").checked;
+      if (!on) clearState();
+      loadIfEnabled();
+      updateAll();
+    });
+
+    // first paint
+    updateAll();
+  </script>
+</body>
+</html>
 
 
 
     
       
+
 
 
 
