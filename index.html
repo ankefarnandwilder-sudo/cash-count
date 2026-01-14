@@ -179,6 +179,52 @@ td:first-child, th:first-child {
 </style> 
 </head> 
 <body>
+<!-- Haupttitel -->
+  <h1>Cash-Count</h1>
+  <h2>Offline Bargeldzähler für Kassen, Schichtwechsel & Abschlüsse</h2>
+  <!-- Infobox / Erklärung -->
+  <div class="cc-intro">
+    <p>
+      Cash-Count ist ein offline nutzbarer Bargeldzähler für Kassenstände,
+      Schichtwechsel und Kassenabschluss.
+    </p>
+    <ul>
+      <li>Werbefrei</li>
+      <li>Ohne Registrierung</li>
+      <li>Sofort einsatzbereit</li>
+    </ul>
+    <a class="cc-btn" href="#rechner">Bargeldzähler öffnen</a>
+  </div>
+<hr>
+  <!-- Rechnerbereich -->
+  <div id="rechner" class="cc-panel">
+    <!-- Buttons oben -->
+    <div class="bar">
+      <button class="ok">Speichern</button>
+      <button class="danger"
+        >Neuer Vorgang</
+     button>
+    </div>
+    <!-- Tabelle -->
+    <table>
+      <thead>
+        <tr>
+          <th>Stück</th>
+          <th>Anzahl</th>
+          <th>Betrag</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Hier kommen später die Zeilen -->
+      </tbody>
+    </table>
+    <!-- Gesamtsumme -->
+    <div class="total">
+      Gesamtsumme: 0,00 €
+    </div>
+  </div>
+</body>
+</html>
 
 
 
