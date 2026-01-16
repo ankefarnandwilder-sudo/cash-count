@@ -1,3 +1,247 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cash-Count – Bargeldzähler (offline)</title>
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#2f2f2f;
+      --muted:#666;
+      --sand:#cbb89d;
+      --sandText:#3a2f1f;
+      --sage:#9fb6a2;
+      --sageText:#1f2d22;
+      --border:#e5e5e5;
+      --panel:#fafafa;
+      --radius:14px;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      margin:16px;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+
+    .wrap{ max-width:760px; margin:0 auto; }
+
+    h1{
+      margin:10px 0 6px;
+      text-align:center;
+      font-size:1.55rem;
+      font-weight:750;
+      letter-spacing:.02em;
+    }
+
+    .intro{
+      margin:18px auto 14px;
+      padding:16px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:#fff;
+    }
+
+    .intro ul{ margin:0 0 12px 18px; }
+
+    .cta{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:650;
+      border:1px solid var(--border);
+      background:var(--panel);
+      color:var(--text);
+    }
+
+    hr.sep{
+      border:none;
+      border-top:1px solid var(--border);
+      margin:16px auto;
+      max-width:760px;
+    }
+
+    .bar{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-bottom:12px;
+    }
+
+    button{
+      border:none;
+      border-radius:12px;
+      padding:12px 16px;
+      font-weight:650;
+      min-height:44px;
+      cursor:pointer;
+    }
+
+    .ok{ background:var(--sage); color:var(--sageText); }
+    .danger{ background:var(--sand); color:var(--sandText); }
+
+    table{
+      width:100%;
+      max-width:760px;
+      margin:0 auto;
+      border-collapse:collapse;
+    }
+
+    th, td{
+      padding:10px 8px;
+      border-bottom:1px solid #e2e2e2;
+      text-align:right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th{
+      background:#f5f5f5;
+      position:sticky;
+      top:0;
+    }
+
+    td:first-child{
+      text-align:left;
+      font-weight:650;
+    }
+
+    input{
+      width:92px;
+      text-align:right;
+      padding:10px;
+      font-size:17px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      min-height:44px;
+    }
+
+    input:focus{
+      outline:none;
+      border-color:var(--sage);
+      box-shadow:0 0 0 3px rgba(159,182,162,.25);
+    }
+
+    .zero{ color:#888; }
+
+    .total{
+      max-width:760px;
+      margin:12px auto 0;
+      font-size:1.35em;
+      font-weight:850;
+      text-align:center;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--panel);
+      position:sticky;
+      bottom:10px;
+    }
+
+    .history{
+      max-width:760px;
+      margin:18px auto;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:14px;
+      background:#fff;
+    }
+
+    .item{
+      display:flex;
+      justify-content:space-between;
+      border-top:1px dashed #eee;
+      padding:10px 0;
+    }
+
+    .meta{ font-weight:650; }
+    .small{ color:var(--muted); font-size:.9rem; }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+  <h1>Cash-Count</h1>
+
+  <div class="intro">
+    <p>Offline nutzbarer Bargeldzähler für Kassenstände, Schichtwechsel und Kassenabschluss.</p>
+    <ul>
+      <li>Werbefrei</li>
+      <li>Ohne Registrierung</li>
+      <li>Sofort einsatzbereit</li>
+    </ul>
+    <a class="cta" href="#rechner">Bargeldzähler öffnen</a>
+  </div>
+</div>
+
+<hr class="sep" />
+
+<div id="rechner" class="bar">
+  <button class="ok" id="btnSave">Zählung speichern</button>
+  <button class="danger" id="btnNew">Neuer Zählvorgang</button>
+</div>
+
+<table>
+<tr><th>Stückelung</th><th>Anzahl</th><th>Betrag</th></tr>
+
+<!-- Scheine -->
+<tr><td>500 €</td><td><input type="number" id="c50000" inputmode="numeric"></td><td id="s50000" class="zero">—</td></tr>
+<tr><td>200 €</td><td><input type="number" id="c20000" inputmode="numeric"></td><td id="s20000" class="zero">—</td></tr>
+<tr><td>100 €</td><td><input type="number" id="c10000" inputmode="numeric"></td><td id="s10000" class="zero">—</td></tr>
+<tr><td>50 €</td><td><input type="number" id="c5000" inputmode="numeric"></td><td id="s5000" class="zero">—</td></tr>
+<tr><td>20 €</td><td><input type="number" id="c2000" inputmode="numeric"></td><td id="s2000" class="zero">—</td></tr>
+<tr><td>10 €</td><td><input type="number" id="c1000" inputmode="numeric"></td><td id="s1000" class="zero">—</td></tr>
+<tr><td>5 €</td><td><input type="number" id="c500" inputmode="numeric"></td><td id="s500" class="zero">—</td></tr>
+
+<!-- Münzen -->
+<tr><td>2 €</td><td><input type="number" id="c200" inputmode="numeric"></td><td id="s200" class="zero">—</td></tr>
+<tr><td>1 €</td><td><input type="number" id="c100" inputmode="numeric"></td><td id="s100" class="zero">—</td></tr>
+<tr><td>50 Cent</td><td><input type="number" id="c50" inputmode="numeric"></td><td id="s50" class="zero">—</td></tr>
+<tr><td>20 Cent</td><td><input type="number" id="c20" inputmode="numeric"></td><td id="s20" class="zero">—</td></tr>
+<tr><td>10 Cent</td><td><input type="number" id="c10" inputmode="numeric"></td><td id="s10" class="zero">—</td></tr>
+<tr><td>5 Cent</td><td><input type="number" id="c5" inputmode="numeric"></td><td id="s5" class="zero">—</td></tr>
+<tr><td>2 Cent</td><td><input type="number" id="c2" inputmode="numeric"></td><td id="s2" class="zero">—</td></tr>
+<tr><td>1 Cent</td><td><input type="number" id="c1" inputmode="numeric"></td><td id="s1" class="zero">—</td></tr>
+
+</table>
+
+<div class="total">
+  Gesamtsumme: <span id="total">0,00&nbsp;€</span>
+</div>
+
+<!-- JavaScript bleibt IDENTISCH zu deiner Version -->
+<script>
+  const values = {
+    c1:0.01,c2:0.02,c5:0.05,c10:0.10,c20:0.20,c50:0.50,
+    c100:1,c200:2,c500:5,c1000:10,c2000:20,c5000:50,
+    c10000:100,c20000:200,c50000:500
+  };
+
+  const fmtEUR = n => n.toLocaleString("de-DE",{minimumFractionDigits:2})+" €";
+
+  function update(){
+    let total=0;
+    for(const id in values){
+      const v=document.getElementById(id).value||0;
+      const sum=v*values[id];
+      const out=document.getElementById("s"+id.substring(1));
+      out.textContent=sum?fmtEUR(sum):"—";
+      out.className=sum?"":"zero";
+      total+=sum;
+    }
+    document.getElementById("total").innerHTML=fmtEUR(total).replace(" €","&nbsp;€");
+  }
+
+  document.querySelectorAll("input").forEach(i=>i.addEventListener("input",update));
+</script>
+</body>
+</html>
 
    
  
@@ -115,6 +359,7 @@
    
     
       
+
 
 
 
