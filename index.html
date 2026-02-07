@@ -32,9 +32,9 @@
     .wrap{ max-width:760px; margin:0 auto; }
 
     h1{
-      margin:10px 0 6px;
+      margin:12px 0 10px;
       text-align:center;
-      font-size:1.55rem;
+      font-size:1.7rem;
       font-weight:750;
       letter-spacing:.02em;
     }
@@ -69,18 +69,19 @@
 
     .bar{
       display:flex;
-      gap:12px;
+      gap:14px;
       flex-wrap:wrap;
       justify-content:center;
-      margin-bottom:12px;
+      margin-bottom:18px;
     }
 
     button{
       border:none;
       border-radius:12px;
-      padding:12px 16px;
+      padding:14px 20px;
       font-weight:650;
-      min-height:44px;
+      min-height:52px;
+      font-size:16px;
       cursor:pointer;
     }
 
@@ -92,51 +93,65 @@
       max-width:760px;
       margin:0 auto;
       border-collapse:collapse;
+      table-layout:fixed;
     }
 
+    col.col-denom{ width:34%; }
+    col.col-qty{ width:28%; }
+    col.col-sum{ width:38%; }
+
     th, td{
-      padding:10px 8px;
-      border-bottom:1px solid #e2e2e2;
-      text-align:right;
+      padding:14px 10px;
+      border-bottom:1px solid var(--border);
       font-variant-numeric: tabular-nums;
     }
 
     th{
       background:#f5f5f5;
-      position:sticky;
-      top:0;
+      text-align:center;
+      font-size:16px;
+      font-weight:650;
     }
 
     td:first-child{
       text-align:left;
-      font-weight:650;
+      font-weight:700;
+      font-size:18px;
     }
 
+    td:nth-child(2){ text-align:center; }
+    td:nth-child(3){ text-align:right; }
+
     input{
-      width:92px;
-      text-align:right;
-      padding:10px;
-      font-size:17px;
-      border:1px solid #ccc;
-      border-radius:10px;
-      min-height:44px;
+      width:100%;
+      max-width:120px;
+      padding:14px 12px;
+      font-size:21px;
+      border-radius:12px;
+      border:3px solid #ccc;
+      min-height:52px;
+      text-align:center;
     }
 
     input:focus{
       outline:none;
       border-color:var(--sage);
-      box-shadow:0 0 0 3px rgba(159,182,162,.25);
     }
 
     .zero{ color:#888; }
 
+    td.sum{
+      font-size:18px;
+      font-weight:650;
+    }
+
     .total{
       max-width:760px;
-      margin:12px auto 0;
-      font-size:1.35em;
-      font-weight:850;
+      margin:18px auto 0;
+      font-size:1.9rem;
+      font-weight:900;
       text-align:center;
-      padding:14px;
+      padding:20px;
       border:1px solid var(--border);
       border-radius:var(--radius);
       background:var(--panel);
@@ -144,24 +159,16 @@
       bottom:10px;
     }
 
-    .history{
-      max-width:760px;
-      margin:18px auto;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:14px;
-      background:#fff;
-    }
+    @media(max-width:520px){
+      col.col-denom{ width:36%; }
+      col.col-qty{ width:26%; }
+      col.col-sum{ width:38%; }
 
-    .item{
-      display:flex;
-      justify-content:space-between;
-      border-top:1px dashed #eee;
-      padding:10px 0;
+      td:first-child{ font-size:20px; }
+      input{ font-size:23px; max-width:130px; }
+      td.sum{ font-size:19px; }
+      .total{ font-size:2.1rem; }
     }
-
-    .meta{ font-weight:650; }
-    .small{ color:var(--muted); font-size:.9rem; }
   </style>
 </head>
 
@@ -188,34 +195,36 @@
 </div>
 
 <table>
-<tr><th>Stückelung</th><th>Anzahl</th><th>Betrag</th></tr>
+  <colgroup>
+    <col class="col-denom">
+    <col class="col-qty">
+    <col class="col-sum">
+  </colgroup>
 
-<!-- Scheine -->
-<tr><td>500 €</td><td><input type="number" id="c50000" inputmode="numeric"></td><td id="s50000" class="zero">—</td></tr>
-<tr><td>200 €</td><td><input type="number" id="c20000" inputmode="numeric"></td><td id="s20000" class="zero">—</td></tr>
-<tr><td>100 €</td><td><input type="number" id="c10000" inputmode="numeric"></td><td id="s10000" class="zero">—</td></tr>
-<tr><td>50 €</td><td><input type="number" id="c5000" inputmode="numeric"></td><td id="s5000" class="zero">—</td></tr>
-<tr><td>20 €</td><td><input type="number" id="c2000" inputmode="numeric"></td><td id="s2000" class="zero">—</td></tr>
-<tr><td>10 €</td><td><input type="number" id="c1000" inputmode="numeric"></td><td id="s1000" class="zero">—</td></tr>
-<tr><td>5 €</td><td><input type="number" id="c500" inputmode="numeric"></td><td id="s500" class="zero">—</td></tr>
+  <tr><th>Stückelung</th><th>Anzahl</th><th>Betrag</th></tr>
 
-<!-- Münzen -->
-<tr><td>2 €</td><td><input type="number" id="c200" inputmode="numeric"></td><td id="s200" class="zero">—</td></tr>
-<tr><td>1 €</td><td><input type="number" id="c100" inputmode="numeric"></td><td id="s100" class="zero">—</td></tr>
-<tr><td>50 Cent</td><td><input type="number" id="c50" inputmode="numeric"></td><td id="s50" class="zero">—</td></tr>
-<tr><td>20 Cent</td><td><input type="number" id="c20" inputmode="numeric"></td><td id="s20" class="zero">—</td></tr>
-<tr><td>10 Cent</td><td><input type="number" id="c10" inputmode="numeric"></td><td id="s10" class="zero">—</td></tr>
-<tr><td>5 Cent</td><td><input type="number" id="c5" inputmode="numeric"></td><td id="s5" class="zero">—</td></tr>
-<tr><td>2 Cent</td><td><input type="number" id="c2" inputmode="numeric"></td><td id="s2" class="zero">—</td></tr>
-<tr><td>1 Cent</td><td><input type="number" id="c1" inputmode="numeric"></td><td id="s1" class="zero">—</td></tr>
+  <tr><td>500 €</td><td><input type="number" id="c50000" inputmode="numeric"></td><td id="s50000" class="sum zero">0,00 €</td></tr>
+  <tr><td>200 €</td><td><input type="number" id="c20000" inputmode="numeric"></td><td id="s20000" class="sum zero">0,00 €</td></tr>
+  <tr><td>100 €</td><td><input type="number" id="c10000" inputmode="numeric"></td><td id="s10000" class="sum zero">0,00 €</td></tr>
+  <tr><td>50 €</td><td><input type="number" id="c5000" inputmode="numeric"></td><td id="s5000" class="sum zero">0,00 €</td></tr>
+  <tr><td>20 €</td><td><input type="number" id="c2000" inputmode="numeric"></td><td id="s2000" class="sum zero">0,00 €</td></tr>
+  <tr><td>10 €</td><td><input type="number" id="c1000" inputmode="numeric"></td><td id="s1000" class="sum zero">0,00 €</td></tr>
+  <tr><td>5 €</td><td><input type="number" id="c500" inputmode="numeric"></td><td id="s500" class="sum zero">0,00 €</td></tr>
 
+  <tr><td>2 €</td><td><input type="number" id="c200" inputmode="numeric"></td><td id="s200" class="sum zero">0,00 €</td></tr>
+  <tr><td>1 €</td><td><input type="number" id="c100" inputmode="numeric"></td><td id="s100" class="sum zero">0,00 €</td></tr>
+  <tr><td>50 Cent</td><td><input type="number" id="c50" inputmode="numeric"></td><td id="s50" class="sum zero">0,00 €</td></tr>
+  <tr><td>20 Cent</td><td><input type="number" id="c20" inputmode="numeric"></td><td id="s20" class="sum zero">0,00 €</td></tr>
+  <tr><td>10 Cent</td><td><input type="number" id="c10" inputmode="numeric"></td><td id="s10" class="sum zero">0,00 €</td></tr>
+  <tr><td>5 Cent</td><td><input type="number" id="c5" inputmode="numeric"></td><td id="s5" class="sum zero">0,00 €</td></tr>
+  <tr><td>2 Cent</td><td><input type="number" id="c2" inputmode="numeric"></td><td id="s2" class="sum zero">0,00 €</td></tr>
+  <tr><td>1 Cent</td><td><input type="number" id="c1" inputmode="numeric"></td><td id="s1" class="sum zero">0,00 €</td></tr>
 </table>
 
 <div class="total">
   Gesamtsumme: <span id="total">0,00&nbsp;€</span>
 </div>
 
-<!-- JavaScript bleibt IDENTISCH zu deiner Version -->
 <script>
   const values = {
     c1:0.01,c2:0.02,c5:0.05,c10:0.10,c20:0.20,c50:0.50,
@@ -231,21 +240,23 @@
       const v=document.getElementById(id).value||0;
       const sum=v*values[id];
       const out=document.getElementById("s"+id.substring(1));
-      out.textContent=sum?fmtEUR(sum):"—";
-      out.className=sum?"":"zero";
+      out.textContent=sum?fmtEUR(sum):"0,00 €";
+      out.className="sum"+(sum?"":" zero");
       total+=sum;
     }
     document.getElementById("total").innerHTML=fmtEUR(total).replace(" €","&nbsp;€");
   }
 
   document.querySelectorAll("input").forEach(i=>i.addEventListener("input",update));
+  document.getElementById("btnNew").onclick=()=>{
+    document.querySelectorAll("input").forEach(i=>i.value="");
+    update();
+  };
+  document.getElementById("btnSave").onclick=()=>update();
+  update();
 </script>
 </body>
 </html>
-
-
-
-@@ -130,5 +374,6 @@
 
 
 
@@ -378,6 +389,7 @@
    
     
       
+
 
 
 
