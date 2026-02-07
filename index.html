@@ -1,269 +1,243 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cash-Count – Bargeldzähler (offline)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cash-Count – Bargeldzähler (offline)</title>
 
-  <style>
-    :root{
-      --bg:#ffffff;
-      --text:#2f2f2f;
-      --muted:#666;
-      --sand:#cbb89d;
-      --sandText:#3a2f1f;
-      --sage:#9fb6a2;
-      --sageText:#1f2d22;
-      --border:#e5e5e5;
-      --panel:#fafafa;
-      --radius:14px;
-    }
+<style>
+:root{
+  --petrol:#43727a;
+  --petrolText:#ffffff;
+  --senf:#C9A24A;
+  --senfText:#3a2f1f;
+  --bg:#ffffff;
+  --panel:#f6f6f6;
+  --border:#e2e2e2;
+  --text:#2f2f2f;
+  --radius:14px;
+}
 
-    *{ box-sizing:border-box; }
+*{box-sizing:border-box}
 
-    body{
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      margin:16px;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.45;
-    }
+body{
+  margin:16px;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
 
-    .wrap{ max-width:760px; margin:0 auto; }
+.wrap{
+  max-width:760px;
+  margin:0 auto;
+}
 
-    h1{
-      margin:12px 0 10px;
-      text-align:center;
-      font-size:1.7rem;
-      font-weight:750;
-      letter-spacing:.02em;
-    }
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
+  margin:10px 0 20px;
+}
 
-    .intro{
-      margin:18px auto 14px;
-      padding:16px;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      background:#fff;
-    }
+h1{
+  font-size:1.8rem;
+  font-weight:750;
+  margin:0;
+}
 
-    .intro ul{ margin:0 0 12px 18px; }
+.header-total{
+  font-weight:700;
+  font-size:1.1rem;
+  color:var(--petrol);
+  white-space:nowrap;
+}
 
-    .cta{
-      display:inline-block;
-      padding:10px 14px;
-      border-radius:12px;
-      text-decoration:none;
-      font-weight:650;
-      border:1px solid var(--border);
-      background:var(--panel);
-      color:var(--text);
-    }
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
 
-    hr.sep{
-      border:none;
-      border-top:1px solid var(--border);
-      margin:16px auto;
-      max-width:760px;
-    }
+col.col-denom{width:38%}
+col.col-qty{width:24%}
+col.col-sum{width:38%}
 
-    .bar{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-      justify-content:center;
-      margin-bottom:18px;
-    }
+th,td{
+  padding:14px 10px;
+  border-bottom:1px solid var(--border);
+  font-variant-numeric:tabular-nums;
+}
 
-    button{
-      border:none;
-      border-radius:12px;
-      padding:14px 20px;
-      font-weight:650;
-      min-height:52px;
-      font-size:16px;
-      cursor:pointer;
-    }
+th{
+  background:#f1f1f1;
+  font-size:15px;
+}
 
-    .ok{ background:var(--sage); color:var(--sageText); }
-    .danger{ background:var(--sand); color:var(--sandText); }
+th:nth-child(1), td:nth-child(1){text-align:left}
+th:nth-child(2), td:nth-child(2){text-align:center}
+th:nth-child(3), td:nth-child(3){text-align:right}
 
-    table{
-      width:100%;
-      max-width:760px;
-      margin:0 auto;
-      border-collapse:collapse;
-      table-layout:fixed;
-    }
+td:nth-child(1){
+  font-size:19px;
+  font-weight:700;
+}
 
-    col.col-denom{ width:34%; }
-    col.col-qty{ width:28%; }
-    col.col-sum{ width:38%; }
+input{
+  width:100%;
+  max-width:120px;
+  padding:14px 12px;
+  font-size:22px;
+  border-radius:14px;
+  border:3px solid var(--border);
+  text-align:center;
+}
 
-    th, td{
-      padding:14px 10px;
-      border-bottom:1px solid var(--border);
-      font-variant-numeric: tabular-nums;
-    }
+input:focus{
+  outline:none;
+  border-color:var(--petrol);
+}
 
-    th{
-      background:#f5f5f5;
-      text-align:center;
-      font-size:16px;
-      font-weight:650;
-    }
+.sum{
+  font-size:19px;
+  font-weight:700;
+}
 
-    td:first-child{
-      text-align:left;
-      font-weight:700;
-      font-size:18px;
-    }
+/* BUTTONS */
+.bar{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  margin:26px 0 10px;
+  flex-wrap:wrap;
+}
 
-    td:nth-child(2){ text-align:center; }
-    td:nth-child(3){ text-align:right; }
+button{
+  flex:1;
+  min-width:220px;
+  min-height:56px;
+  padding:14px 18px;
+  border:none;
+  border-radius:14px;
+  font-weight:700;
+  font-size:16px;
+  cursor:pointer;
+}
 
-    input{
-      width:100%;
-      max-width:120px;
-      padding:14px 12px;
-      font-size:21px;
-      border-radius:12px;
-      border:3px solid #ccc;
-      min-height:52px;
-      text-align:center;
-    }
+.ok{background:var(--petrol);color:var(--petrolText)}
+.danger{background:var(--senf);color:var(--senfText)}
 
-    input:focus{
-      outline:none;
-      border-color:var(--sage);
-    }
+/* TOTAL */
+.total{
+  position:sticky;
+  bottom:10px;
+  margin:20px auto 10px;
+  padding:22px;
+  font-size:2rem;
+  font-weight:900;
+  text-align:center;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
 
-    .zero{ color:#888; }
-
-    td.sum{
-      font-size:18px;
-      font-weight:650;
-    }
-
-    .total{
-      max-width:760px;
-      margin:18px auto 0;
-      font-size:1.9rem;
-      font-weight:900;
-      text-align:center;
-      padding:20px;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      background:var(--panel);
-      position:sticky;
-      bottom:10px;
-    }
-
-    @media(max-width:520px){
-      col.col-denom{ width:36%; }
-      col.col-qty{ width:26%; }
-      col.col-sum{ width:38%; }
-
-      td:first-child{ font-size:20px; }
-      input{ font-size:23px; max-width:130px; }
-      td.sum{ font-size:19px; }
-      .total{ font-size:2.1rem; }
-    }
-  </style>
+@media(max-width:520px){
+  td:nth-child(1){font-size:21px}
+  input{font-size:24px}
+  .sum{font-size:21px}
+  .total{font-size:2.2rem}
+  button{min-width:0}
+}
+</style>
 </head>
 
 <body>
 <div class="wrap">
+
+<div class="header">
   <h1>Cash-Count</h1>
-
-  <div class="intro">
-    <p>Offline nutzbarer Bargeldzähler für Kassenstände, Schichtwechsel und Kassenabschluss.</p>
-    <ul>
-      <li>Werbefrei</li>
-      <li>Ohne Registrierung</li>
-      <li>Sofort einsatzbereit</li>
-    </ul>
-    <a class="cta" href="#rechner">Bargeldzähler öffnen</a>
-  </div>
-</div>
-
-<hr class="sep" />
-
-<div id="rechner" class="bar">
-  <button class="ok" id="btnSave">Zählung speichern</button>
-  <button class="danger" id="btnNew">Neuer Zählvorgang</button>
+  <div class="header-total">Summe: <span id="totalTop">0,00 €</span></div>
 </div>
 
 <table>
-  <colgroup>
-    <col class="col-denom">
-    <col class="col-qty">
-    <col class="col-sum">
-  </colgroup>
+<colgroup>
+  <col class="col-denom">
+  <col class="col-qty">
+  <col class="col-sum">
+</colgroup>
 
-  <tr><th>Stückelung</th><th>Anzahl</th><th>Betrag</th></tr>
+<tr>
+  <th>Stückelung</th>
+  <th>Anzahl</th>
+  <th>Betrag</th>
+</tr>
 
-  <tr><td>500 €</td><td><input type="number" id="c50000" inputmode="numeric"></td><td id="s50000" class="sum zero">0,00 €</td></tr>
-  <tr><td>200 €</td><td><input type="number" id="c20000" inputmode="numeric"></td><td id="s20000" class="sum zero">0,00 €</td></tr>
-  <tr><td>100 €</td><td><input type="number" id="c10000" inputmode="numeric"></td><td id="s10000" class="sum zero">0,00 €</td></tr>
-  <tr><td>50 €</td><td><input type="number" id="c5000" inputmode="numeric"></td><td id="s5000" class="sum zero">0,00 €</td></tr>
-  <tr><td>20 €</td><td><input type="number" id="c2000" inputmode="numeric"></td><td id="s2000" class="sum zero">0,00 €</td></tr>
-  <tr><td>10 €</td><td><input type="number" id="c1000" inputmode="numeric"></td><td id="s1000" class="sum zero">0,00 €</td></tr>
-  <tr><td>5 €</td><td><input type="number" id="c500" inputmode="numeric"></td><td id="s500" class="sum zero">0,00 €</td></tr>
+<tr><td>500 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="500"></td><td class="sum">0,00 €</td></tr>
+<tr><td>200 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="200"></td><td class="sum">0,00 €</td></tr>
+<tr><td>100 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="100"></td><td class="sum">0,00 €</td></tr>
+<tr><td>50 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="50"></td><td class="sum">0,00 €</td></tr>
+<tr><td>20 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="20"></td><td class="sum">0,00 €</td></tr>
+<tr><td>10 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="10"></td><td class="sum">0,00 €</td></tr>
+<tr><td>5 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="5"></td><td class="sum">0,00 €</td></tr>
 
-  <tr><td>2 €</td><td><input type="number" id="c200" inputmode="numeric"></td><td id="s200" class="sum zero">0,00 €</td></tr>
-  <tr><td>1 €</td><td><input type="number" id="c100" inputmode="numeric"></td><td id="s100" class="sum zero">0,00 €</td></tr>
-  <tr><td>50 Cent</td><td><input type="number" id="c50" inputmode="numeric"></td><td id="s50" class="sum zero">0,00 €</td></tr>
-  <tr><td>20 Cent</td><td><input type="number" id="c20" inputmode="numeric"></td><td id="s20" class="sum zero">0,00 €</td></tr>
-  <tr><td>10 Cent</td><td><input type="number" id="c10" inputmode="numeric"></td><td id="s10" class="sum zero">0,00 €</td></tr>
-  <tr><td>5 Cent</td><td><input type="number" id="c5" inputmode="numeric"></td><td id="s5" class="sum zero">0,00 €</td></tr>
-  <tr><td>2 Cent</td><td><input type="number" id="c2" inputmode="numeric"></td><td id="s2" class="sum zero">0,00 €</td></tr>
-  <tr><td>1 Cent</td><td><input type="number" id="c1" inputmode="numeric"></td><td id="s1" class="sum zero">0,00 €</td></tr>
+<tr><td>2 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="2"></td><td class="sum">0,00 €</td></tr>
+<tr><td>1 €</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="1"></td><td class="sum">0,00 €</td></tr>
+<tr><td>50 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="0.5"></td><td class="sum">0,00 €</td></tr>
+<tr><td>20 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="0.2"></td><td class="sum">0,00 €</td></tr>
+<tr><td>10 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="0.1"></td><td class="sum">0,00 €</td></tr>
+<tr><td>5 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="0.05"></td><td class="sum">0,00 €</td></tr>
+<tr><td>2 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="0.02"></td><td class="sum">0,00 €</td></tr>
+<tr><td>1 Cent</td><td><input type="number" inputmode="numeric" min="0" step="1" data-val="0.01"></td><td class="sum">0,00 €</td></tr>
 </table>
 
-<div class="total">
-  Gesamtsumme: <span id="total">0,00&nbsp;€</span>
+<div class="bar">
+  <button class="danger" id="reset">Neuer Zählvorgang</button>
+  <button class="ok" id="save">Zählung speichern</button>
+</div>
+
+<div class="total">Gesamtsumme: <span id="total">0,00 €</span></div>
 </div>
 
 <script>
-  const values = {
-    c1:0.01,c2:0.02,c5:0.05,c10:0.10,c20:0.20,c50:0.50,
-    c100:1,c200:2,c500:5,c1000:10,c2000:20,c5000:50,
-    c10000:100,c20000:200,c50000:500
-  };
+const inputs=document.querySelectorAll("input");
+const totalEl=document.getElementById("total");
+const totalTop=document.getElementById("totalTop");
 
-  const fmtEUR = n => n.toLocaleString("de-DE",{minimumFractionDigits:2})+" €";
+function fmt(n){
+  return n.toLocaleString("de-DE",{minimumFractionDigits:2})+" €";
+}
 
-  function update(){
-    let total=0;
-    for(const id in values){
-      const v=document.getElementById(id).value||0;
-      const sum=v*values[id];
-      const out=document.getElementById("s"+id.substring(1));
-      out.textContent=sum?fmtEUR(sum):"0,00 €";
-      out.className="sum"+(sum?"":" zero");
-      total+=sum;
-    }
-    document.getElementById("total").innerHTML=fmtEUR(total).replace(" €","&nbsp;€");
-  }
+function update(){
+  let total=0;
+  inputs.forEach(i=>{
+    const qty=parseInt(i.value)||0;
+    const val=parseFloat(i.dataset.val);
+    const sum=qty*val;
+    i.parentElement.nextElementSibling.textContent=fmt(sum);
+    total+=sum;
+  });
+  totalEl.textContent=fmt(total);
+  totalTop.textContent=fmt(total);
+  localStorage.setItem("cashcount",JSON.stringify([...inputs].map(i=>i.value)));
+}
 
-  document.querySelectorAll("input").forEach(i=>i.addEventListener("input",update));
-  document.getElementById("btnNew").onclick=()=>{
-    document.querySelectorAll("input").forEach(i=>i.value="");
-    update();
-  };
-  document.getElementById("btnSave").onclick=()=>update();
+inputs.forEach(i=>i.addEventListener("input",update));
+
+document.getElementById("reset").onclick=()=>{
+  inputs.forEach(i=>i.value="");
   update();
+};
+
+document.getElementById("save").onclick=()=>update();
+
+const saved=JSON.parse(localStorage.getItem("cashcount")||"[]");
+inputs.forEach((i,n)=>i.value=saved[n]||"");
+update();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-   
 
    
     
@@ -389,6 +363,7 @@
    
     
       
+
 
 
 
