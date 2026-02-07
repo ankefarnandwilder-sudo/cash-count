@@ -15,7 +15,6 @@
   --panel:#f7f7f7;
   --border:#e3e3e3;
   --text:#2f2f2f;
-  --muted:#666;
   --radius:14px;
 }
 
@@ -28,19 +27,22 @@ body{
   color:var(--text);
 }
 
-.wrap{max-width:760px;margin:0 auto}
+.wrap{
+  max-width:760px;
+  margin:0 auto;
+}
 
 h1{
   text-align:center;
   font-size:1.7rem;
-  margin:12px 0 10px;
+  margin:14px 0 12px;
 }
 
 .bar{
   display:flex;
   gap:14px;
   justify-content:center;
-  margin:14px 0 18px;
+  margin:14px 0 20px;
 }
 
 button{
@@ -59,24 +61,29 @@ button{
 table{
   width:100%;
   border-collapse:collapse;
+  table-layout:fixed;
 }
 
+col.col-denom{width:34%}
+col.col-qty{width:28%}
+col.col-sum{width:38%}
+
 th,td{
-  padding:14px 8px;
+  padding:14px 10px;
   border-bottom:1px solid var(--border);
   font-variant-numeric:tabular-nums;
 }
 
 th{
   background:#f1f1f1;
-  font-size:16px;
   text-align:center;
+  font-size:16px;
 }
 
 td:first-child{
   text-align:left;
   font-weight:800;
-  font-size:18px;
+  font-size:19px;
 }
 
 td:nth-child(2){
@@ -89,9 +96,9 @@ td:nth-child(3){
 
 input{
   width:100%;
-  max-width:110px;
+  max-width:120px;
   padding:14px 12px;
-  font-size:20px;
+  font-size:21px;
   border-radius:14px;
   border:3px solid var(--border);
   text-align:center;
@@ -103,16 +110,16 @@ input:focus{
 }
 
 .sum{
-  font-size:18px;
+  font-size:19px;
   font-weight:700;
 }
 
 .total{
   position:sticky;
   bottom:10px;
-  margin:18px auto 8px;
-  padding:20px;
-  font-size:1.8rem;
+  margin:20px auto 10px;
+  padding:22px;
+  font-size:1.9rem;
   font-weight:900;
   text-align:center;
   background:var(--panel);
@@ -121,11 +128,14 @@ input:focus{
 }
 
 @media(max-width:520px){
-  th,td{padding:16px 6px}
-  td:first-child{font-size:20px}
-  .sum{font-size:19px}
-  input{font-size:22px;max-width:120px}
-  .total{font-size:2rem}
+  col.col-denom{width:36%}
+  col.col-qty{width:26%}
+  col.col-sum{width:38%}
+
+  td:first-child{font-size:21px}
+  input{font-size:23px;max-width:130px}
+  .sum{font-size:20px}
+  .total{font-size:2.1rem}
 }
 </style>
 </head>
@@ -140,7 +150,17 @@ input:focus{
 </div>
 
 <table>
-<tr><th>Stückelung</th><th>Anzahl</th><th>Betrag</th></tr>
+<colgroup>
+  <col class="col-denom">
+  <col class="col-qty">
+  <col class="col-sum">
+</colgroup>
+
+<tr>
+  <th>Stückelung</th>
+  <th>Anzahl</th>
+  <th>Betrag</th>
+</tr>
 
 <tr><td>500 €</td><td><input data-val="500"></td><td class="sum">0,00 €</td></tr>
 <tr><td>200 €</td><td><input data-val="200"></td><td class="sum">0,00 €</td></tr>
@@ -167,7 +187,9 @@ input:focus{
 const inputs=document.querySelectorAll("input");
 const totalEl=document.getElementById("total");
 
-function fmt(n){return n.toLocaleString("de-DE",{minimumFractionDigits:2})+" €"}
+function fmt(n){
+  return n.toLocaleString("de-DE",{minimumFractionDigits:2})+" €";
+}
 
 function update(){
   let total=0;
@@ -197,7 +219,6 @@ update();
 </script>
 </body>
 </html>
-
     
   
 
@@ -329,6 +350,7 @@ update();
    
     
       
+
 
 
 
